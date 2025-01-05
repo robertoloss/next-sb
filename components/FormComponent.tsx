@@ -1,12 +1,12 @@
 'use client'
 
 import { v4 as uuid } from "uuid"
-import { cn } from "@/lib/utils"
-import { useOptimistic, useState, useTransition } from "react"
+import { RefObject, useOptimistic, useTransition } from "react"
 import ExpenseCard from "./ExpenseCard"
+import { useDragAndDrop } from "@formkit/drag-and-drop/react";
 
 type Props = {
-  createExpenseAction: ({ id }: { id: string; }) => Promise<void>
+  createExpenseAction: ({ id, amount }: { id: string; amount: number }) => Promise<void>
   expenses: any[]
 }
 export default function FormComponent({ createExpenseAction, expenses }: Props) {
@@ -31,18 +31,24 @@ export default function FormComponent({ createExpenseAction, expenses }: Props) 
       }
     }
   )
-  console.log("form rendered")
+  const [parentRef, values, setValues] = useDragAndDrop(
+    optimisticExpenses
+  )
+  
 
   return (
      <div className="flex flex-col gap-y-4">
-      <form action={() => {
+      <form 
+        className="flex flex-row gap-4"
+        action={(data: FormData) => {
           const id = uuid()
+          const amount = data.get('amount') as unknown as number
           startTransition(() => updateOptimisticExpenses({ 
             action: "create",
-            amount: 100,
+            amount,
             id
           }))
-          createExpenseAction({ id })
+          createExpenseAction({ id, amount })
         }}
       >
         <button 
@@ -51,9 +57,17 @@ export default function FormComponent({ createExpenseAction, expenses }: Props) 
         >
           Create!
         </button>
+        <input 
+          type="number" 
+          name="amount"
+          className="bg-gray-900 w-full"
+        />
       </form>
-      <div className="flex flex-col gap-y-4">
-        {optimisticExpenses.map(expense => (
+      <div 
+        className="flex flex-col gap-y-4"
+        ref={parentRef as RefObject<HTMLDivElement>}
+      >
+        {values.map(expense => (
           <ExpenseCard 
             updateOptimisticExpenses={updateOptimisticExpenses}
             expense={expense}
