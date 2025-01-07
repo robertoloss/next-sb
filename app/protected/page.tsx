@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { createExpense } from "../actions/createExpense";
 import FormComponent from "@/components/FormComponent";
+import updateExpensesOrder from "../actions/updateExpensesOrder";
 
 
 export default async function Home() {
@@ -16,10 +17,11 @@ export default async function Home() {
   const { data: expenses } = await supabase
     .from("Expense")
     .select()
-    .order("created_at", { ascending: false});
+    .order("position", { ascending: true });
 
   return (
     <FormComponent
+      updateExpensesOrderAction={updateExpensesOrder}
       createExpenseAction={createExpense}
       expenses={expenses || []}
     />

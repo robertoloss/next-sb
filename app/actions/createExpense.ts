@@ -2,12 +2,12 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export const createExpense = async (
-  { id, 
-    amount 
-  }: { 
-    id: string,
-    amount: number,
+export const createExpense = async ({ 
+  id, 
+  amount 
+}: { 
+  id: string,
+  amount: number,
 }) => {
   const supabase = await createClient();
 
