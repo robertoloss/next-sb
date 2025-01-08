@@ -1,29 +1,27 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { createExpense } from "../actions/createExpense";
+import { createTask } from "../actions/createTask";
 import FormComponent from "@/components/FormComponent";
-import updateExpensesOrder from "../actions/updateExpensesOrder";
-
+import updateTasksOrder from "../actions/updateTasksOrder";
 
 export default async function Home() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     return redirect("/sign-in");
   }
-  const { data: expenses } = await supabase
-    .from("Expense")
+
+  const { data: tasks } = await supabase
+    .from("Task")
     .select()
     .order("position", { ascending: true });
 
   return (
     <FormComponent
-      updateExpensesOrderAction={updateExpensesOrder}
-      createExpenseAction={createExpense}
-      expenses={expenses || []}
+      updateTasksOrderAction={updateTasksOrder}
+      createTaskAction={createTask}
+      tasks={tasks || []}
     />
   )
 }
