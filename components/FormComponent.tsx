@@ -11,6 +11,7 @@ type Props = {
   tasks: Task[]
 }
 export default function FormComponent({ createTaskAction, tasks, updateTasksOrderAction }: Props) {
+
   const [ optimisticTasks, updateOptimisticTasks ] = useOptimistic(
     tasks,
     (state, { action, id, label, newPositions } : {
@@ -33,6 +34,7 @@ export default function FormComponent({ createTaskAction, tasks, updateTasksOrde
         case "delete":
           return state.filter(e => e.id !== id)
         case "updatePositions":
+          //console.log("update: ", newPositions)
           return newPositions || state
         case "changeState":
           return state.map(task => {
@@ -45,7 +47,6 @@ export default function FormComponent({ createTaskAction, tasks, updateTasksOrde
       }
     }
   )
-  console.log("FormComponent")
 
   return (
     <TaskList 

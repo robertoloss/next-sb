@@ -16,6 +16,7 @@ export default async function Home() {
     .from("Task")
     .select()
     .order("position", { ascending: true });
+  console.log("home")
 
   return (
     <FormComponent

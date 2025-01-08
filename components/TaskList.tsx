@@ -1,9 +1,11 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect, useTransition } from "react";
 import TaskCard from "./TaskCard";
 import { Task } from "./FormComponent";
 import AddTask from "./AddTask";
 import { handleEnd } from "@formkit/drag-and-drop";
+import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, useDraggable, useDroppable, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -24,48 +26,61 @@ export default function TaskList({
   updateOptimisticTasks,
   createTaskAction,
   updateTasksOrder
-}: Props) {
-  const [parentRef, values, setValues] = useDragAndDrop<HTMLUListElement,Task>(
-    optimisticTasks,
-    {
-      group: "tasks",
-      handleEnd(data) {
-        async function manageEnd() {
-          const newTasks = values.map((val, i) => ({ ...val, position: i }))
-          setValues(newTasks)
-          await updateTasksOrder({ newList: newTasks})
-					if (data.initialParent?.el) handleEnd(data)
-        }
-        manageEnd()
-      },
-      //dropZoneClass: "opacity-25",
-    }
-  )
-  useEffect(()=>{
-    console.log("useEffect TaskList")
-    setValues(optimisticTasks)
-  },[optimisticTasks])
+}: Props) 
+{
+  const [_, startTransition ] = useTransition()
 
-  console.log("TaskList")
+  async function manageEnd(e: DragEndEvent) {
+    //console.log(e)
+    const { active, over } = e;
+
+    if (active.id !== over?.id) {
+      const oldIndex = optimisticTasks.findIndex((task) => task.id === active.id);
+      const newIndex = optimisticTasks.findIndex((task) => task.id === over?.id);
+
+      const newOrder = arrayMove(optimisticTasks, oldIndex, newIndex);
+      const newPositions = newOrder.map((task, i) => ({ ...task, position: i}))
+      startTransition(() => updateOptimisticTasks({
+        action: "updatePositions",
+        newPositions
+      }))
+      updateTasksOrder({ newList: newPositions})
+    }
+  }
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+  );
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <AddTask 
-        updateOptimisticTasks={updateOptimisticTasks}
-        createTaskAction={createTaskAction}
-      />
-      <ul 
-        className="flex flex-col gap-y-4"
-        ref={parentRef} 
-      >
-        {values.map(task => (
-          <TaskCard 
-            updateOptimisticTasks={updateOptimisticTasks}
-            task={task}
-            key={task.id}
-          />
-        ))}
-      </ul>
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={()=>{}}
+      onDragEnd={manageEnd}
+    >
+      <div className="flex flex-col gap-y-4">
+        <AddTask 
+          updateOptimisticTasks={updateOptimisticTasks}
+          createTaskAction={createTaskAction}
+        />
+        <div className="flex flex-col gap-y-4">
+          <SortableContext
+            items={optimisticTasks}
+            strategy={verticalListSortingStrategy}
+          >
+          {
+            optimisticTasks.map(task => (
+              <TaskCard 
+                updateOptimisticTasks={updateOptimisticTasks}
+                task={task}
+                key={task.id}
+                id={task.id}
+              />
+            ))
+          }
+          </SortableContext>
+        </div>
+      </div>
+    </DndContext>
   )
 }
