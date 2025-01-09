@@ -16,7 +16,6 @@ type Props = {
 export default function AddTask({ createTaskAction, updateOptimisticTasks, projectId }: Props) {
   const [ eventValue, setEventValue ] = useState('')
   const [ _, startTransition ] = useTransition()
-  console.log("add task", projectId)
 
   function addTask(data: FormData) {
     const id = uuid()

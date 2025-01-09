@@ -16,18 +16,25 @@ export default async function Main({ params } : Props) {
   if (!user) {
     return redirect("/sign-in");
   }
-  const { data: tasks } = await supabase
+  const { data: userTasks } = await supabase
     .from("Task")
-    .select()
-    .eq('project', projectId)
+    .select("*, project(*)")
+    .eq('project.user', user.id)
     .order("position", { ascending: true });
 
-  const { data: project } = await supabase
+  const { data: projects } = await supabase
     .from('Project')
     .select('*')
-    .eq('id', projectId)
-    .single()
+  
+
+  userTasks?.forEach(task => console.log(task.project?.id))
     
+  const tasks = userTasks?.filter(task => task.project?.id === projectId)
+  const projectArray = projects?.filter(project => project.id == projectId)
+  const project = projectArray && projectArray.length > 0 ? projectArray[0] : null
+
+  console.log("tasks", tasks)
+
 
 
   return (      
@@ -37,7 +44,7 @@ export default async function Main({ params } : Props) {
         createTaskAction={createTask}
         tasks={tasks || []}
         projectId={projectId}
-        project={project}
+        project={project || null}
       />
     </div>
   )
