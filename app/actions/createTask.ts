@@ -4,10 +4,12 @@ import { revalidatePath } from "next/cache";
 
 export const createTask = async ({ 
   id, 
-  label 
+  label,
+  projectId
 }: { 
   id: string,
   label: string,
+  projectId: string
 }) => {
   const supabase = await createClient();
   const { data: tasks, error: fetchError } = await supabase
@@ -31,18 +33,20 @@ export const createTask = async ({
   }
 
   console.log("creating task: ", id, label)
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("Task")
     .insert([{ 
       label, 
       id,
-      position: 0
-    }]);
+      position: 0,
+      project: projectId
+    }])
+    .select()
 
   if (error) {
     console.error("Failed to create task:", error.message);
   } else {
-    console.log("Task created successfully!");
+    console.log("Task created successfully!", data );
     revalidatePath('/protected')
   }
 };

@@ -9,6 +9,30 @@ export type Json =
 export type Database = {
   checkbox: {
     Tables: {
+      Project: {
+        Row: {
+          created_at: string
+          id: string
+          name: string | null
+          position: number | null
+          user: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          name?: string | null
+          position?: number | null
+          user?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          position?: number | null
+          user?: string | null
+        }
+        Relationships: []
+      }
       Task: {
         Row: {
           checked: boolean
@@ -17,6 +41,7 @@ export type Database = {
           id: string
           label: string | null
           position: number | null
+          project: string | null
         }
         Insert: {
           checked?: boolean
@@ -25,6 +50,7 @@ export type Database = {
           id: string
           label?: string | null
           position?: number | null
+          project?: string | null
         }
         Update: {
           checked?: boolean
@@ -33,8 +59,17 @@ export type Database = {
           id?: string
           label?: string | null
           position?: number | null
+          project?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "Task_project_fkey"
+            columns: ["project"]
+            isOneToOne: false
+            referencedRelation: "Project"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

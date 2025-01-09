@@ -4,17 +4,19 @@ import { Task } from "./FormComponent";
 
 
 type Props = {
-  createTaskAction: ({ id, label }: { id: string; label: string }) => Promise<void>,
+  createTaskAction: ({ id, label, projectId }: { id: string; label: string, projectId: string }) => Promise<void>,
   updateOptimisticTasks: (action: {
     action: "create" | "delete" | "updatePositions";
     id?: string;
     label?: string;
     newPositions?: Task[]
   }) => void,
+  projectId: string
 }
-export default function AddTask({ createTaskAction, updateOptimisticTasks }: Props) {
+export default function AddTask({ createTaskAction, updateOptimisticTasks, projectId }: Props) {
   const [ eventValue, setEventValue ] = useState('')
   const [ _, startTransition ] = useTransition()
+  console.log("add task", projectId)
 
   function addTask(data: FormData) {
     const id = uuid()
@@ -22,9 +24,9 @@ export default function AddTask({ createTaskAction, updateOptimisticTasks }: Pro
     startTransition(() => updateOptimisticTasks({ 
       action: "create",
       label,
-      id
+      id,
     }))
-    createTaskAction({ id, label })
+    createTaskAction({ id, label, projectId })
   }
 
 

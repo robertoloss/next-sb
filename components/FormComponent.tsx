@@ -9,8 +9,9 @@ type Props = {
   updateTasksOrderAction: ({ newList }: { newList: any[] }) => Promise<void>
   createTaskAction: ({ id, label }: { id: string; label: string }) => Promise<void>
   tasks: Task[]
+  projectId: string
 }
-export default function FormComponent({ createTaskAction, tasks, updateTasksOrderAction }: Props) {
+export default function FormComponent({ projectId, createTaskAction, tasks, updateTasksOrderAction }: Props) {
 
   const [ optimisticTasks, updateOptimisticTasks ] = useOptimistic(
     tasks,
@@ -28,6 +29,7 @@ export default function FormComponent({ createTaskAction, tasks, updateTasksOrde
             created_at: new Date().toISOString(),
             description: null,
             position: -1,
+            project: projectId,
             checked: false,
           };
           return [ dummyTask, ...state ]
@@ -54,6 +56,7 @@ export default function FormComponent({ createTaskAction, tasks, updateTasksOrde
       optimisticTasks={optimisticTasks}
       updateTasksOrder={updateTasksOrderAction}
       updateOptimisticTasks={updateOptimisticTasks}
+      projectId={projectId}
     />
   )
 }

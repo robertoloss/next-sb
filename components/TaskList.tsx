@@ -1,11 +1,10 @@
-import { useDragAndDrop } from "@formkit/drag-and-drop/react";
-import { RefObject, useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import TaskCard from "./TaskCard";
 import { Task } from "./FormComponent";
 import AddTask from "./AddTask";
-import { handleEnd } from "@formkit/drag-and-drop";
-import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, useDraggable, useDroppable, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { closestCenter, DndContext, DragEndEvent, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -19,13 +18,15 @@ type Props = {
   createTaskAction: ({ id, label }: { id: string; label: string }) => Promise<void>,
   updateOptimisticTasks: UpdateOptimisitTasks,
   optimisticTasks: Task[]
+  projectId: string
 }
 
 export default function TaskList({
   optimisticTasks,
   updateOptimisticTasks,
   createTaskAction,
-  updateTasksOrder
+  updateTasksOrder,
+  projectId
 }: Props) 
 {
   const [_, startTransition ] = useTransition()
@@ -53,6 +54,10 @@ export default function TaskList({
 
   return (
     <DndContext
+      modifiers={[
+        restrictToVerticalAxis,
+        restrictToParentElement
+      ]}
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragStart={()=>{}}
@@ -62,6 +67,7 @@ export default function TaskList({
         <AddTask 
           updateOptimisticTasks={updateOptimisticTasks}
           createTaskAction={createTaskAction}
+          projectId={projectId}
         />
         <div className="flex flex-col gap-y-4">
           <SortableContext
