@@ -22,6 +22,14 @@ export default async function Main({ params } : Props) {
     .eq('project', projectId)
     .order("position", { ascending: true });
 
+  const { data: project } = await supabase
+    .from('Project')
+    .select('*')
+    .eq('id', projectId)
+    .single()
+    
+
+
   return (      
     <div className="flex flex-row justify-center w-full h-full p-4 pt-10">
       <FormComponent
@@ -29,6 +37,7 @@ export default async function Main({ params } : Props) {
         createTaskAction={createTask}
         tasks={tasks || []}
         projectId={projectId}
+        project={project}
       />
     </div>
   )

@@ -5,6 +5,7 @@ import AddTask from "./AddTask";
 import { closestCenter, DndContext, DragEndEvent, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { Project } from "./ProjectCard";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -15,10 +16,11 @@ export type UpdateOptimisitTasks = (action: {
 
 type Props = {
   updateTasksOrder: ({ newList }: { newList: any[] }) => Promise<void>
-  createTaskAction: ({ id, label }: { id: string; label: string }) => Promise<void>,
+  createTaskAction: ({ id, label, projectId }: { id: string; label: string, projectId: string }) => Promise<void>,
   updateOptimisticTasks: UpdateOptimisitTasks,
   optimisticTasks: Task[]
   projectId: string
+  project: Project | null
 }
 
 export default function TaskList({
@@ -26,7 +28,8 @@ export default function TaskList({
   updateOptimisticTasks,
   createTaskAction,
   updateTasksOrder,
-  projectId
+  projectId,
+  project
 }: Props) 
 {
   const [_, startTransition ] = useTransition()
@@ -64,6 +67,9 @@ export default function TaskList({
       onDragEnd={manageEnd}
     >
       <div className="flex flex-col gap-y-4">
+        <h1 className="">
+          {project ? project.name : ''}
+        </h1>
         <AddTask 
           updateOptimisticTasks={updateOptimisticTasks}
           createTaskAction={createTaskAction}
