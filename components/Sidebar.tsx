@@ -22,7 +22,7 @@ export default async function SideBar({ children }: { children: React.ReactNode}
   return (
     <SidebarProvider>
       <AppSidebar 
-        projects={projects}
+        projects={projects || []}
         createProjectAction={createProject}
       />
       <SidebarInset>
