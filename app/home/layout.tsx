@@ -1,3 +1,4 @@
+import SideBar from "@/components/Sidebar"
 
 
 type Props = {
@@ -5,12 +6,12 @@ type Props = {
   sidebar: React.ReactNode
   children: React.ReactNode
 }
-export default async function Layout({ main, sidebar, children }: Props) {
+export default async function Layout({ children }: Props) {
 
   return (
     <div className="flex p-4 flex-row w-full h-full">
-      {sidebar}
-      {main}
+      <SideBar/>
+      { children }
     </div>
   )
 }

@@ -9,6 +9,7 @@ type Props = {
 }
 export default async function Main({ params } : Props) {
   const projectId = (await params).projectId;
+  console.log(projectId)
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
