@@ -85,6 +85,7 @@ export default function TaskList({
           {
             optimisticTasks.map(task => (
               <TaskCard 
+                overlay={false}
                 updateOptimisticTasks={updateOptimisticTasks}
                 task={task}
                 key={task.id}
