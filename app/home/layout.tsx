@@ -1,9 +1,6 @@
 import SideBar from "@/components/Sidebar"
 
-
 type Props = {
-  main: React.ReactNode
-  sidebar: React.ReactNode
   children: React.ReactNode
 }
 export default async function Layout({ children }: Props) {
