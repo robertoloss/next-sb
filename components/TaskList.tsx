@@ -1,8 +1,8 @@
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import TaskCard from "./TaskCard";
 import { Task } from "./FormComponent";
 import AddTask from "./AddTask";
-import { closestCenter, DndContext, DragEndEvent, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Project } from "./ProjectCard";
@@ -33,8 +33,10 @@ export default function TaskList({
 }: Props) 
 {
   const [_, startTransition ] = useTransition()
+  const [ activeTaskId, setActiveTaskId ] = useState<string | null>(null)
 
   async function manageEnd(e: DragEndEvent) {
+    setActiveTaskId(null)
     //console.log(e)
     const { active, over } = e;
 
@@ -63,7 +65,7 @@ export default function TaskList({
       ]}
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragStart={()=>{}}
+      onDragStart={(event)=>{ setActiveTaskId(event.active.id as string) }}
       onDragEnd={manageEnd}
     >
       <div className="flex flex-col gap-y-4">
@@ -93,6 +95,17 @@ export default function TaskList({
           </SortableContext>
         </div>
       </div>
+      {activeTaskId &&
+        <DragOverlay>
+          <TaskCard 
+            overlay={true}
+            updateOptimisticTasks={updateOptimisticTasks}
+            task={optimisticTasks.find(task => task.id === activeTaskId!)!}
+            key={optimisticTasks.find(task => task.id === activeTaskId!)!.id}
+            id={optimisticTasks.find(task => task.id === activeTaskId!)!.id}
+          />
+        </DragOverlay>
+      }
     </DndContext>
   )
 }
