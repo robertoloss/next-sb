@@ -1,8 +1,13 @@
 import createProject from "@/app/actions/createProject";
 import { createClient } from "@/utils/supabase/server";
 import ProjectList from "@/components/ProjectList";
+import { Sidebar, SidebarGroup, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from "./ui/sidebar";
+import { AppSidebar } from "./app-sidebar";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./ui/breadcrumb";
+import React from "react";
 
-export default async function SideBar() {
+export default async function SideBar({ children }: { children: React.ReactNode}) {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase
@@ -17,11 +22,14 @@ export default async function SideBar() {
     
 
   return (
-    <div className="flex flex-col gap-y-4 p-4 bg-gray-700 w-full max-w-[320px]">
-      <ProjectList
-        projects={projects || []}
+    <SidebarProvider>
+      <AppSidebar 
+        projects={projects}
         createProjectAction={createProject}
       />
-    </div>
+      <SidebarInset>
+        { children }
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

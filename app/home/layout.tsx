@@ -7,8 +7,9 @@ export default async function Layout({ children }: Props) {
 
   return (
     <div className="flex p-4 flex-row w-full h-full">
-      <SideBar/>
+      <SideBar>
       { children }
+      </SideBar>
     </div>
   )
 }
