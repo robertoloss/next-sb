@@ -100,6 +100,7 @@ export default function TaskList({
       {activeTaskId &&
         <DragOverlay>
           <TaskCard 
+            projectId={projectId}
             overlay={true}
             updateOptimisticTasks={updateOptimisticTasks}
             task={optimisticTasks.find(task => task.id === activeTaskId!)!}
