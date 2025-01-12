@@ -19,7 +19,7 @@ export default function ProjectCard({ project }: Props) {
     >
       <Button
         variant="link"
-        className={`flex flex-row  rounded-xsm 
+        className={`flex flex-row  rounded-xsm bg-foreground/10 hover:bg-foreground/20 
             justify-start w-full font-normal text-foreground 
        `}
       >

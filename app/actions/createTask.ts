@@ -14,7 +14,8 @@ export const createTask = async ({
   const supabase = await createClient();
   const { data: tasks, error: fetchError } = await supabase
     .from("Task")
-    .select("id, position");
+    .select("id, position")
+    .eq('project', projectId)
 
   if (fetchError) {
     console.error("Error fetching tasks:", fetchError.message);

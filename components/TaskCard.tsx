@@ -1,13 +1,12 @@
 import deleteTask from "@/app/actions/deleteTask"
 import { cn } from "@/lib/utils"
-import { useState, useTransition } from "react"
+import { useTransition } from "react"
 import { Task } from "./FormComponent"
 import changeTaskState from "@/app/actions/changeTaskState"
-import { useDraggable } from "@dnd-kit/core"
 import { useSortable } from "@dnd-kit/sortable"
 import {CSS} from '@dnd-kit/utilities';
 import { Card } from "./ui/card"
-import { GripVertical, Trash2Icon, TrashIcon } from "lucide-react"
+import { GripVertical, Trash2Icon } from "lucide-react"
 import { Checkbox } from "./ui/checkbox"
 
 
@@ -20,8 +19,9 @@ type Props = {
   }) => void
   id: string
   overlay: boolean
+  projectId: string
 }
-export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: Props) {
+export default function TaskCard({ task, overlay, updateOptimisticTasks, id, projectId }: Props) {
   const [ _, startTransition ] = useTransition()
   const { setNodeRef, listeners, attributes, isDragging, transform, transition } = useSortable({
     id,
@@ -41,7 +41,11 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
       action: "delete",
       id: task.id
     }))
-    deleteTask({ id: task.id, position: task.position! })
+    deleteTask({ 
+      id: task.id, 
+      position: task.position!,
+      projectId
+    })
   }
   function changeState() {
     if (!task) return
@@ -56,14 +60,18 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
     <Card
       style={style}
       { ...attributes }
-      className={cn(`w-full flex items-center cursor-default flex-row gap-x-4 justify-between p-4 rounded-lg 
-        bg-sidebar-background border-foreground/50`, {
-        'placeholder-background bg-opacity-100 border-foreground/10 shadow-none': task?.checked,
+      className={cn(`w-full flex items-center cursor-default flex-row gap-x-4 justify-between rounded-lg 
+        bg-sidebar-background border-foreground`, {
+        'bg-opacity-100 shadow-none border-primary/0': task?.checked,
         'z-50 h-fit': isDragging,
         'invisible': isDragging && !overlay
       })}
       ref={setNodeRef}
     >
+      <div className={cn(`flex flex-row items-center cursor-default gap-x-4 justify-between
+        p-4 rounded-lg bg-primary/5 w-full`, {
+          'bg-primary/0': task?.checked
+      })}>
       <div 
         { ...listeners }
         className={cn("cursor-grab", {
@@ -73,20 +81,20 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
         <GripVertical 
           width={12}
           className={cn(``,{
-            'text-secondary': task?.checked
+            'text-primary/50': task?.checked
           })}
         />
       </div>
       <Checkbox
         onClick={changeState}
         checked={task?.checked}
-        color={task?.checked ? '#2ad41e' : ''}
+        color={task?.checked ? '#1a4996' : ''}
         className={cn("w-5 h-5", {
         })}
       />
       <div 
         className={cn("flex flex-row justify-start w-full font-light", {
-          'line-through text-secondary': task?.checked
+          'line-through text-primary/50': task?.checked
         })}
       >
         {task?.label}
@@ -94,7 +102,7 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
       <button
         type="button"
         className={cn("text-foreground hover:text-destructive transition-all", {
-          'text-foreground/10': task?.checked
+          'text-primary/50': task?.checked
         })}
         onClick={deleteThisTask}
       >
@@ -102,6 +110,7 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
           width={14}
         />
       </button>
+      </div>
     </Card>
   )
 }

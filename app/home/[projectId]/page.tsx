@@ -36,7 +36,7 @@ export default async function Main({ params } : Props) {
 
 
   return (      
-    <div className="flex flex-row bg-background justify-center w-full h-full pt-10">
+    <div className="flex flex-row h-full bg-background justify-center w-full pt-10">
       <GeometricPattern/>
       <FormComponent
         updateTasksOrderAction={updateTasksOrder}

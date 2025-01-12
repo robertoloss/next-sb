@@ -6,7 +6,7 @@ type Props = {
 export default async function Layout({ children }: Props) {
 
   return (
-    <div className="flex flex-row w-full h-full">
+    <div className="flex flex-row w-screen h-screen">
       <SideBar>
         { children }
       </SideBar>

@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.tasklist {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent; /* Firefox */
+}
+
+.tasklist::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.tasklist::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Default thumb color */
+  border-radius: 10px;
+}
+
+.tasklist::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Dark mode styles */
+.dark .tasklist {
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent; /* Firefox */
+}
+
+.dark .tasklist::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5); /* Lighter in dark mode */
+}
+
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

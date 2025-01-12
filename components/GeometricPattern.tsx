@@ -20,32 +20,54 @@ export function GeometricPattern({ className = '' }: GeometricPatternProps) {
             id="geometric-pattern"
             x="0"
             y="0"
-            width="80"
-            height="80"
+            width="100"
+            height="160"
             patternUnits="userSpaceOnUse"
           >
-            {/* Square */}
-            <rect
-              className="stroke-primary/10 fill-primary/5"
-              x="25"
-              y="25"
-              width="20"
-              height="20"
-            />
-            {/* Top-right circle */}
-            <circle
-              className="fill-primary/10"
-              cx="45"
-              cy="25"
-              r="6"
-            />
-            {/* Bottom-left circle */}
-            <circle
-              className="fill-primary/10"
-              cx="25"
-              cy="45"
-              r="6"
-            />
+            {/* First row */}
+            <g>
+              <rect
+                className="stroke-primary/10 fill-primary/5"
+                x="25"
+                y="25"
+                width="20"
+                height="20"
+              />
+              <circle
+                className="fill-primary/10"
+                cx="45"
+                cy="25"
+                r="6"
+              />
+              <circle
+                className="fill-primary/10"
+                cx="25"
+                cy="45"
+                r="6"
+              />
+            </g>
+            {/* Second row (offset) */}
+            <g transform="translate(50, 80)">
+              <rect
+                className="stroke-primary/10 fill-primary/5"
+                x="25"
+                y="25"
+                width="20"
+                height="20"
+              />
+              <circle
+                className="fill-primary/10"
+                cx="45"
+                cy="25"
+                r="6"
+              />
+              <circle
+                className="fill-primary/10"
+                cx="25"
+                cy="45"
+                r="6"
+              />
+            </g>
           </pattern>
         </defs>
         <rect

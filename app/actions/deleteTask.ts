@@ -2,7 +2,15 @@
 import { createClient } from "@/utils/supabase/server"
 import { revalidatePath } from "next/cache"
 
-export default async function deleteTask({ id, position } : { id: string, position: number }) {
+export default async function deleteTask({ 
+  id, 
+  position, 
+  projectId 
+} : { 
+  id: string, 
+  position: number,
+  projectId: string
+}) {
   const supabase = await createClient()
   
   const { error } = await supabase
@@ -19,6 +27,7 @@ export default async function deleteTask({ id, position } : { id: string, positi
   const { data, error: errorFetch } = await supabase
     .from("Task")
     .select()
+    .eq('project', projectId)
     .gt('position', position)
 
   if (errorFetch || !data ) {
