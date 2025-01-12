@@ -18,7 +18,10 @@ export default function ProjectCard({ project }: Props) {
       href={`/home/${project.id}`}
     >
       <Button
-        className="flex flex-row justify-start w-full font-normal "   
+        variant="link"
+        className={`flex flex-row  rounded-xsm 
+            justify-start w-full font-normal text-foreground 
+       `}
       >
         <h1 className="w-fit">
           {project.name}

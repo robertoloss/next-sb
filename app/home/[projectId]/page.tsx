@@ -1,6 +1,7 @@
 import { createTask } from "@/app/actions/createTask"
 import updateTasksOrder from "@/app/actions/updateTasksOrder"
 import FormComponent from "@/components/FormComponent"
+import { GeometricPattern } from "@/components/GeometricPattern";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -9,7 +10,6 @@ type Props = {
 }
 export default async function Main({ params } : Props) {
   const projectId = (await params).projectId;
-  console.log(projectId)
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -27,19 +27,17 @@ export default async function Main({ params } : Props) {
     .from('Project')
     .select('*')
   
-
-  userTasks?.forEach(task => console.log(task.project?.id))
     
   const tasks = userTasks?.filter(task => task.project?.id === projectId)
   const projectArray = projects?.filter(project => project.id == projectId)
   const project = projectArray && projectArray.length > 0 ? projectArray[0] : null
 
-  console.log("tasks", tasks)
 
 
 
   return (      
-    <div className="flex flex-row justify-center w-full h-full p-4 pt-10">
+    <div className="flex flex-row bg-background justify-center w-full h-full pt-10">
+      <GeometricPattern/>
       <FormComponent
         updateTasksOrderAction={updateTasksOrder}
         createTaskAction={createTask}

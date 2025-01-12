@@ -56,9 +56,9 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
     <Card
       style={style}
       { ...attributes }
-      className={cn(`w-[400px] flex items-center cursor-default flex-row gap-x-4 justify-between p-4 rounded-lg 
-        bg-background border-foreground/50`, {
-        'bg-background border-foreground/10 shadow-none': task?.checked,
+      className={cn(`w-full flex items-center cursor-default flex-row gap-x-4 justify-between p-4 rounded-lg 
+        bg-sidebar-background border-foreground/50`, {
+        'placeholder-background bg-opacity-100 border-foreground/10 shadow-none': task?.checked,
         'z-50 h-fit': isDragging,
         'invisible': isDragging && !overlay
       })}
@@ -67,7 +67,7 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
       <div 
         { ...listeners }
         className={cn("cursor-grab", {
-          'cursor-grabbing': isDragging
+          'cursor-grabbing': overlay
         })}
       >
         <GripVertical 
@@ -80,7 +80,7 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
       <Checkbox
         onClick={changeState}
         checked={task?.checked}
-        color={task?.checked ? 'text-destructive' : ''}
+        color={task?.checked ? '#2ad41e' : ''}
         className={cn("w-5 h-5", {
         })}
       />
@@ -93,7 +93,9 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id }: P
       </div>
       <button
         type="button"
-        className={cn("text-secondary hover:text-destructive", {})}
+        className={cn("text-foreground hover:text-destructive transition-all", {
+          'text-foreground/10': task?.checked
+        })}
         onClick={deleteThisTask}
       >
         <Trash2Icon
