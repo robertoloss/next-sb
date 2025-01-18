@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import TaskCard from "./TaskCard";
 import { Task } from "./FormComponent";
 import AddTask from "./AddTask";
@@ -6,6 +6,9 @@ import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, useS
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Project } from "./ProjectCard";
+import { useAppStore } from "@/utils/zustand/store";
+import ProjectLoader from "@/app/home/[projectId]/loading";
+import { Skeleton } from "./ui/skeleton";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -30,10 +33,17 @@ export default function TaskList({
   updateTasksOrder,
   projectId,
   project
-}: Props) 
+}
+  : Props) 
 {
   const [_, startTransition ] = useTransition()
   const [ activeTaskId, setActiveTaskId ] = useState<string | null>(null)
+  const { showSkeletonList, setShowSkeletonList } = useAppStore()
+
+  useEffect(()=>{
+    setShowSkeletonList(false)
+  },[])
+
 
   async function manageEnd(e: DragEndEvent) {
     setActiveTaskId(null)
@@ -56,6 +66,19 @@ export default function TaskList({
   const sensors = useSensors(
     useSensor(MouseSensor),
   );
+
+  if (showSkeletonList) return (
+    <div className="flex flex-col w-full h-full items-center">
+      <div className="flex flex-col w-full max-w-[640px]  gap-y-4">
+        {[...Array(8).keys()].map((item) => (
+          <Skeleton 
+            key={item}
+            className="w-full h-10 rounded-md min-h-[60px]"
+          />
+        ))}
+      </div>
+    </div>
+  ) 
 
   return (
     <DndContext

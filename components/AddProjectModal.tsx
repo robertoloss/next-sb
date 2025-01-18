@@ -15,6 +15,7 @@ import { UpdateOptimisticProjects } from "./ProjectList"
 import { useState, useTransition } from "react"
 import { Project } from "./ProjectCard"
 import { useRouter } from "next/navigation"
+import { useAppStore } from "@/utils/zustand/store"
 
 type Args = {
   name: string
@@ -31,6 +32,7 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
   const [ eventValue, setEventValue ] = useState('')
   const [ _, startTransition ] = useTransition()
   const router = useRouter()
+  const { setShowSkeletonList } = useAppStore()
 
   function addProject(data: FormData) {
     const projectId = uuid()
@@ -56,6 +58,7 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
   }
 
   function manageButtonClick() {
+    setShowSkeletonList(true)
     setOpen(false)
   }
 

@@ -3,6 +3,8 @@ import { useOptimistic } from "react"
 import TaskList from "./TaskList";
 import { Database } from "@/database.types";
 import { Project } from "./ProjectCard";
+import { useAppStore } from "@/utils/zustand/store";
+import SetShowSkeletonWrapper from "./SetShowSkeletonWrapper";
 
 export type Task = Database['checkbox']['Tables']['Task']['Row']
 
@@ -14,7 +16,6 @@ type Props = {
   project: Project | null
 }
 export default function FormComponent({ projectId, createTaskAction, tasks, updateTasksOrderAction, project }: Props) {
-
   const [ optimisticTasks, updateOptimisticTasks ] = useOptimistic(
     tasks,
     (state, { action, id, label, newPositions } : {
@@ -53,13 +54,13 @@ export default function FormComponent({ projectId, createTaskAction, tasks, upda
   )
 
   return (
-    <TaskList 
-      createTaskAction={createTaskAction}
-      optimisticTasks={optimisticTasks}
-      updateTasksOrder={updateTasksOrderAction}
-      updateOptimisticTasks={updateOptimisticTasks}
-      projectId={projectId}
-      project={project}
-    />
+      <TaskList 
+        createTaskAction={createTaskAction}
+        optimisticTasks={optimisticTasks}
+        updateTasksOrder={updateTasksOrderAction}
+        updateOptimisticTasks={updateOptimisticTasks}
+        projectId={projectId}
+        project={project}
+      />
   )
 }
