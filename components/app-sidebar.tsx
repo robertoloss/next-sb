@@ -3,6 +3,7 @@ import { SearchForm } from "@/components/search-form"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -12,6 +13,8 @@ import {
 import ProjectCard, { Project } from "./ProjectCard"
 import { ComponentProps, useOptimistic } from "react"
 import AddProject from "./AddProject"
+import { AddProjectModal } from "./AddProjectModal"
+import { Button } from "./ui/button"
 
 
 type Props = {
@@ -28,7 +31,7 @@ export function AppSidebar({  projects, createProjectAction, ...props }: Compone
     }) => {
       switch (action) {
         case 'create':
-          return project ? [ project, ...state ] : state
+          return project ? [ ...state, project ] : state
         default:
          return []
       }
@@ -36,26 +39,41 @@ export function AppSidebar({  projects, createProjectAction, ...props }: Compone
   )
   return (
     <Sidebar>
-      <SidebarHeader className="flex flex-col p-4">
-        <SearchForm />
-        <AddProject
-          createProject={createProjectAction} 
-          updateOptimisticProjects={updateOptimisticProjects}
-        />
+      <SidebarHeader className="flex flex-col p-4 border-r border-r-muted-foreground">
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="tasklist border-r border-r-muted-foreground">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <div className="flex flex-col p-4 gap-y-4 w-full">
-                {optimisticProjects.map(project => (
-                  <ProjectCard project={project} key={project.id} />
-                ))}
+                {optimisticProjects
+                  .sort((a,b)=>a.position! - b.position!)
+                  .map(project => (
+                    <ProjectCard project={project} key={project.id} />
+                  ))
+                }
               </div>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className=" border-r p-6 border-r-muted-foreground">
+        <AddProjectModal
+          createProject={createProjectAction} 
+          updateOptimisticProjects={updateOptimisticProjects}
+          numberOfProjects={optimisticProjects.length}
+        >
+          <Button 
+            className={`
+              flex flex-row rounded-xsm 
+              justify-center w-full font-normal text bg-foreground hover:bg-foreground/90 border border-background
+              transition-all
+           `}
+          >
+            New Project +
+          </Button>
+        </AddProjectModal>
+      </SidebarFooter>
       <SidebarRail/>
     </Sidebar>
   )

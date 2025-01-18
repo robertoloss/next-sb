@@ -60,7 +60,7 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id, pro
     <Card
       style={style}
       { ...attributes }
-      className={cn(`w-full flex items-center cursor-default flex-row gap-x-4 justify-between rounded-lg 
+      className={cn(`w-full min-h-[60px] flex items-center cursor-default flex-row gap-x-4 justify-between rounded-lg 
         bg-sidebar-background border-foreground`, {
         'bg-opacity-100 shadow-none border-primary/0': task?.checked,
         'z-50 h-fit': isDragging,

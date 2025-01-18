@@ -68,7 +68,7 @@ export default function TaskList({
       onDragStart={(event)=>{ setActiveTaskId(event.active.id as string) }}
       onDragEnd={manageEnd}
     >
-      <div className="flex flex-col gap-y-4 w-full max-w-[640px] h-full pb-[120px]">
+      <div className="flex z-10 flex-col gap-y-4 w-full max-w-[640px] h-full pb-[120px]">
         <h1 className="">
           {project ? project.name : ''}
         </h1>

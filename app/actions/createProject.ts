@@ -12,6 +12,18 @@ export default async function createProject({ name, id }: { name: string, id: st
     return
   }
 
+  const { count, error: err } = await supabase
+    .from('Project')
+    .select('*', { count: 'exact', head: true })
+    .eq('user', user.id)
+
+  if (err) {
+    console.error(err)
+    return
+  }
+  const position = count
+    
+
   const { error, data } = await supabase
     .from('Project')
     .insert([
@@ -19,7 +31,7 @@ export default async function createProject({ name, id }: { name: string, id: st
         id,
         name,
         user: user.id,
-        position: 0
+        position
       }
     ])
     .select()
@@ -28,6 +40,7 @@ export default async function createProject({ name, id }: { name: string, id: st
     console.error(error)
     return
   }
-  console.log(`New project created: `, data.forEach(p => console.log(p)))
-  revalidatePath('/home/@sidebar')
+  console.log(`New project created: `, data)
+  revalidatePath(`/home`,'layout')
+  revalidatePath(`/home/${id}`)
 }
