@@ -2,13 +2,13 @@ import { useEffect, useState, useTransition } from "react";
 import TaskCard from "./TaskCard";
 import { Task } from "./FormComponent";
 import AddTask from "./AddTask";
-import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Project } from "./ProjectCard";
 import { useAppStore } from "@/utils/zustand/store";
-import ProjectLoader from "@/app/home/[projectId]/loading";
 import { Skeleton } from "./ui/skeleton";
+import { Switch } from "./ui/switch";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -65,6 +65,7 @@ export default function TaskList({
   }
   const sensors = useSensors(
     useSensor(MouseSensor),
+    useSensor(TouchSensor),
   );
 
   if (showSkeletonList) return (
@@ -92,14 +93,19 @@ export default function TaskList({
       onDragEnd={manageEnd}
     >
       <div className="flex z-10 flex-col gap-y-4 w-full max-w-[640px] h-full pb-[120px]">
-        <h1 className="">
-          {project ? project.name : ''}
-        </h1>
-        <AddTask 
-          updateOptimisticTasks={updateOptimisticTasks}
-          createTaskAction={createTaskAction}
-          projectId={projectId}
-        />
+        <div className="flex flex-col w-full px-4 gap-y-4">
+          <div className="flex flex-row w-full justify-between">
+            <h1 className="">
+              {project ? project.name : ''}
+            </h1>
+            <Switch className="dark:data-[state=unchecked]:bg-zinc-700"/>
+          </div>
+          <AddTask 
+            updateOptimisticTasks={updateOptimisticTasks}
+            createTaskAction={createTaskAction}
+            projectId={projectId}
+          />
+        </div>
         <div className="tasklist flex flex-col gap-y-4 h-full overflow-auto pb-5 px-4">
           <SortableContext
             items={optimisticTasks}

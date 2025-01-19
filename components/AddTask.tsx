@@ -1,6 +1,7 @@
 import { useOptimistic, useState, useTransition } from "react"
 import { v4 as uuid } from "uuid"
 import { Task } from "./FormComponent";
+import { Button } from "./ui/button";
 
 
 type Props = {
@@ -35,19 +36,20 @@ export default function AddTask({ createTaskAction, updateOptimisticTasks, proje
       onSubmit={()=>setEventValue('')}
       action={addTask}
     >
-      <button 
-        type="submit"
-        className="w-40 h-10 bg-gray-700 hover:bg-gray-600"
-      >
-        Create!
-      </button>
       <input 
         type="text" 
+        maxLength={60}
         name="label"
         onChange={(e)=>(setEventValue(e.target.value))}
         value={eventValue}
-        className="bg-gray-900 w-full"
+        className="dark:bg-zinc-800 px-4 font-light rounded-md w-full"
       />
+      <Button
+        type="submit"
+        className="w-40 text-background rounded-md font-normal bg-foreground hover:bg-foreground/90"
+      >
+        New Task +
+      </Button>
     </form>
   )
 }
