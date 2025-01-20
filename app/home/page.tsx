@@ -1,3 +1,5 @@
+import { GeometricPattern } from "@/components/GeometricPattern";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 export default async function Page() {

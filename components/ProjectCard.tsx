@@ -1,10 +1,7 @@
 'use client'
-import { Database } from "@/database.types"
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { Loader, Loader2 } from "lucide-react"
-
-export type Project = Database['checkbox']['Tables']['Project']['Row']
+import { Project } from "@/utils/supabase/types"
 
 type Props = {
   project: Project

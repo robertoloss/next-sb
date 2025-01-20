@@ -1,5 +1,4 @@
 'use client'
-import { SearchForm } from "@/components/search-form"
 import {
   Sidebar,
   SidebarContent,
@@ -10,18 +9,20 @@ import {
   SidebarMenu,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import ProjectCard, { Project } from "./ProjectCard"
+import ProjectCard from "./ProjectCard"
+import { Project } from "@/utils/supabase/types"
 import { ComponentProps, useOptimistic } from "react"
-import AddProject from "./AddProject"
 import { AddProjectModal } from "./AddProjectModal"
 import { Button } from "./ui/button"
+import Link from "next/link"
+import { Home } from "lucide-react"
 
 
 type Props = {
   projects: Project[]
   createProjectAction: ({ name, id }: { name: string; id: string }) => Promise<void>
 }
-export function AppSidebar({  projects, createProjectAction, ...props }: ComponentProps<typeof Sidebar> & Props) {
+export function AppSidebar({  projects, createProjectAction }: ComponentProps<typeof Sidebar> & Props) {
   const [ optimisticProjects, updateOptimisticProjects ] = useOptimistic(
     projects,
     (state, { action, project }: {
@@ -37,9 +38,16 @@ export function AppSidebar({  projects, createProjectAction, ...props }: Compone
       }
     }
   )
+
   return (
     <Sidebar>
       <SidebarHeader className="flex flex-col p-4 border-r border-r-muted-foreground">
+        <Link 
+          href={'/home'}
+          className="flex flex-row justify-center hover:text-muted-foreground transition-all"
+        >
+          <Home/>
+        </Link>
       </SidebarHeader>
       <SidebarContent className="tasklist border-r border-r-muted-foreground">
         <SidebarGroup>

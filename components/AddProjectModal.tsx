@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { UpdateOptimisticProjects } from "./ProjectList"
 import { useState, useTransition } from "react"
-import { Project } from "./ProjectCard"
+import { Project } from "@/utils/supabase/types"
 import { useRouter } from "next/navigation"
 import { useAppStore } from "@/utils/zustand/store"
 
@@ -54,7 +54,7 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
       name: projectName!,
       id: projectId
     })
-    router.push(projectId)
+    router.push(`/home/${projectId}`)
   }
 
   function manageButtonClick() {
@@ -67,7 +67,7 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
       <DialogTrigger asChild>
         { children }
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="bg-sidebar-background min-h-60 sm:max-w-[425px]">
         <form
           onSubmit={()=>setEventValue('')}
           action={addProject}

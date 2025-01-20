@@ -1,13 +1,13 @@
 import deleteTask from "@/app/actions/deleteTask"
 import { cn } from "@/lib/utils"
 import { useTransition } from "react"
-import { Task } from "./FormComponent"
 import changeTaskState from "@/app/actions/changeTaskState"
 import { useSortable } from "@dnd-kit/sortable"
 import {CSS} from '@dnd-kit/utilities';
 import { Card } from "./ui/card"
 import { GripVertical, Trash2Icon } from "lucide-react"
 import { Checkbox } from "./ui/checkbox"
+import { Task } from "@/utils/supabase/types"
 
 
 type Props = {

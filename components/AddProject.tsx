@@ -1,7 +1,7 @@
 import { useState, useTransition } from "react"
+import { Project } from "@/utils/supabase/types"
 import { v4 as uuid } from "uuid"
 import { UpdateOptimisticProjects } from "./ProjectList"
-import { Project } from "./ProjectCard"
 
 type Args = {
   name: string

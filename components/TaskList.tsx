@@ -1,14 +1,16 @@
 import { useEffect, useState, useTransition } from "react";
 import TaskCard from "./TaskCard";
-import { Task } from "./FormComponent";
 import AddTask from "./AddTask";
 import { closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { Project } from "./ProjectCard";
+import { Project, Task } from "@/utils/supabase/types";
 import { useAppStore } from "@/utils/zustand/store";
 import { Skeleton } from "./ui/skeleton";
 import { Switch } from "./ui/switch";
+import { ProjectDropDownMenu } from "./ProjectDropDownMenu";
+import { EllipsisVertical } from "lucide-react";
+import { DeleteProjectModal } from "./DeleteProjectModal";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -18,6 +20,7 @@ export type UpdateOptimisitTasks = (action: {
 }) => void 
 
 type Props = {
+  deleteProject: ({ id }: { id: string }) => Promise<void>
   updateTasksOrder: ({ newList }: { newList: any[] }) => Promise<void>
   createTaskAction: ({ id, label, projectId }: { id: string; label: string, projectId: string }) => Promise<void>,
   updateOptimisticTasks: UpdateOptimisitTasks,
@@ -27,6 +30,7 @@ type Props = {
 }
 
 export default function TaskList({
+  deleteProject,
   optimisticTasks,
   updateOptimisticTasks,
   createTaskAction,
@@ -38,6 +42,7 @@ export default function TaskList({
 {
   const [_, startTransition ] = useTransition()
   const [ activeTaskId, setActiveTaskId ] = useState<string | null>(null)
+  const [ openModal, setOpenModal ] = useState(false)
   const { showSkeletonList, setShowSkeletonList } = useAppStore()
 
   useEffect(()=>{
@@ -83,6 +88,7 @@ export default function TaskList({
 
   return (
     <DndContext
+      id={projectId}
       modifiers={[
         restrictToVerticalAxis,
         restrictToParentElement
@@ -94,11 +100,23 @@ export default function TaskList({
     >
       <div className="flex z-10 flex-col gap-y-4 w-full max-w-[640px] h-full pb-[120px]">
         <div className="flex flex-col w-full px-4 gap-y-4">
-          <div className="flex flex-row w-full justify-between">
-            <h1 className="">
+          <div className="flex flex-row w-full items-center justify-between">
+            <h1 className="font-light text-xl">
               {project ? project.name : ''}
             </h1>
-            <Switch className="dark:data-[state=unchecked]:bg-zinc-700"/>
+            <DeleteProjectModal 
+              openModal={openModal} 
+              setOpenModal={setOpenModal}
+              project={project}
+              deleteProject={deleteProject}
+            />
+            <ProjectDropDownMenu setOpenModal={setOpenModal}>
+              <EllipsisVertical 
+                width={20} 
+                className="cursor-pointer"
+              />
+            </ProjectDropDownMenu>
+            {false && <Switch className="dark:data-[state=unchecked]:bg-zinc-700"/>}
           </div>
           <AddTask 
             updateOptimisticTasks={updateOptimisticTasks}

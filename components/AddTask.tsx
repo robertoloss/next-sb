@@ -1,6 +1,6 @@
-import { useOptimistic, useState, useTransition } from "react"
+import { useState, useTransition } from "react"
 import { v4 as uuid } from "uuid"
-import { Task } from "./FormComponent";
+import { Task } from "@/utils/supabase/types";
 import { Button } from "./ui/button";
 
 
