@@ -59,7 +59,7 @@ export function DeleteProjectModal({
     >
       <DialogTrigger asChild>
       </DialogTrigger>
-      <DialogContent className="bg-sidebar-background flex flex-col justify-between sm:max-w-[425px] min-h-52">
+      <DialogContent className="rounded-md max-w-[92%] pt-10 bg-sidebar-background flex flex-col justify-between sm:max-w-[425px] min-h-52">
        {!showInput &&
           <>
             <DialogHeader>
@@ -72,10 +72,10 @@ export function DeleteProjectModal({
                 This action cannot be undone
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter>
+            <DialogFooter className="flex flex-row justify-end gap-x-4">
               <CancelButton setOpenModal={setOpenModal}/>
               <Button 
-                className="bg-destructive-foreground max-w-[80px] self-end w-full"
+                className="bg-foreground dark:bg-destructive-foreground max-w-[80px] self-end w-full"
                 type="button"
                 onClick={()=>setShowInput(true)}
               >
@@ -106,7 +106,7 @@ export function DeleteProjectModal({
                 onFocus={()=>setError(false)}
               />
             </DialogHeader>
-            <DialogFooter>
+            <DialogFooter className="flex flex-row justify-end gap-x-4">
               <CancelButton 
                 setOpenModal={setOpenModal}
                 setShowInput={setShowInput}
@@ -137,7 +137,7 @@ function CancelButton({ setOpenModal, setShowInput }: CancelProps) {
   }
   return (
     <Button 
-      className="border-destructive-foreground bg-background border font-light text-foreground max-w-[80px] w-full hover:bg-foreground/10"
+      className="border-foreground dark:border-destructive-foreground bg-background border font-light text-foreground max-w-[80px] w-full hover:bg-foreground/10"
       type="button"
       onClick={clickHandler}
     >

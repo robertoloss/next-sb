@@ -42,11 +42,11 @@ export default function AddTask({ createTaskAction, updateOptimisticTasks, proje
         name="label"
         onChange={(e)=>(setEventValue(e.target.value))}
         value={eventValue}
-        className="dark:bg-zinc-800 px-4 font-light rounded-md w-full"
+        className="dark:bg-zinc-800 dark:border-none border border-muted-foreground/50 px-4 font-light rounded-md w-full bg-stone-100"
       />
       <Button
         type="submit"
-        className="w-40 text-background rounded-md font-normal bg-foreground hover:bg-foreground/90"
+        className="w-40 min-w-[120px] text-background rounded-md font-normal bg-foreground hover:bg-foreground/90"
       >
         New Task +
       </Button>

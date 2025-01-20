@@ -70,7 +70,7 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id, pro
     >
       <div className={cn(`flex flex-row items-center cursor-default gap-x-4 justify-between
         p-4 rounded-lg bg-primary/5 w-full`, {
-          'bg-primary/0': task?.checked
+          'bg-primary/0 border border-primary/10': task?.checked
       })}>
       <div 
         { ...listeners }
