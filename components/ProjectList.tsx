@@ -1,7 +1,8 @@
 'use client'
 import { useOptimistic } from "react"
 import AddProject from "./AddProject"
-import ProjectCard, { Project } from "./ProjectCard"
+import ProjectCard from "./ProjectCard"
+import { Project } from "@/utils/supabase/types"
 
 export type UpdateOptimisticProjects =  (action: {
     action: string;
