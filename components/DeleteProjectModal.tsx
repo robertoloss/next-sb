@@ -75,7 +75,7 @@ export function DeleteProjectModal({
     >
       <DialogTrigger asChild>
       </DialogTrigger>
-      <DialogContent className="rounded-md max-w-[92%] pt-10 bg-sidebar-background flex flex-col justify-between sm:max-w-[425px] min-h-60">
+      <DialogContent className="rounded-md max-w-[92%] pt-10 bg-sidebar-background flex flex-col justify-between sm:max-w-[425px] min-h-64">
        {!showInput &&
           <>
             <DialogHeader>

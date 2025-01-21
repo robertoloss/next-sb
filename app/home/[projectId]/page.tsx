@@ -38,7 +38,7 @@ export default async function Main({ params } : Props) {
 
   return (      
     <div className="flex flex-row h-full justify-center w-full pt-10">
-      <GeometricPattern />
+      <GeometricPattern className="z-0" />
       <FormComponent
         deleteProjectAction={deleteProject}
         updateTasksOrderAction={updateTasksOrder}

@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
   return (
     <div className="flex flex-col w-full h-full items-center px-4">
-      <GeometricPattern/>
+      <GeometricPattern className="z-0"/>
       <div className="flex flex-col justify-end min-h-[140px] w-full max-w-[606px]">
         <Skeleton className="w-[128px] h-[28px]"/>
         <div className="h-4"/>

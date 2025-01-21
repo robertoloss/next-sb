@@ -1,5 +1,6 @@
 import { signInAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
+import { GeometricPattern } from "@/components/GeometricPattern";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,7 +9,8 @@ import Link from "next/link";
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
-    <form className="flex rounded-lg flex-col min-w-80 justify-center border border-foreground h-fit p-10">
+    <form className="flex bg-background rounded-lg flex-col justify-center border border-foreground p-10 w-full max-w-[360px] min-h-[380px]">
+      <GeometricPattern className=""/>
       <h1 className="text-2xl font-medium">Sign in</h1>
       <p className="text-sm text-foreground">
         Don't have an account?{" "}

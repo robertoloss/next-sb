@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SmtpMessage } from "../smtp-message";
+import { GeometricPattern } from "@/components/GeometricPattern";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
@@ -20,7 +21,8 @@ export default async function Signup(props: {
 
   return (
     <>
-      <form className="flex rounded-lg flex-col min-w-80 justify-center border border-foreground h-fit p-10">
+      <form className="flex rounded-lg flex-col w-full max-w-[360px] justify-center border border-foreground h-fit p-10 bg-background min-h-[380px]">
+        <GeometricPattern className="-z-20"/>
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
