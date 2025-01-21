@@ -41,6 +41,5 @@ export default async function createProject({ name, id }: { name: string, id: st
     return
   }
   console.log(`New project created: `, data)
-  revalidatePath(`/home`,'layout')
-  revalidatePath(`/home/${id}`)
+  revalidatePath('/home')
 }

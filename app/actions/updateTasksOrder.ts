@@ -21,7 +21,7 @@ export default async function updateTasksOrder({ newList }: { newList: any[]}) {
       return;
     }
 
-    revalidatePath("/protected")
+    revalidatePath("/home")
 
   } catch(error) {
     console.error(error)

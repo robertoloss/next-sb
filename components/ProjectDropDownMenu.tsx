@@ -15,12 +15,19 @@ export function ProjectDropDownMenu({ children, setOpenModal }: Props) {
   const [ open, setOpen ] = useState(false)
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu 
+      open={open} 
+      onOpenChange={setOpen}
+    >
       <DropdownMenuTrigger asChild>
         { children }
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex w-fit min-w-[0px]">
-        <DropdownMenuGroup className="flex w-fit">
+      <DropdownMenuContent 
+        alignOffset={4}
+        align="end"
+        className="flex w-fit min-w-[0px]"
+      >
+        <DropdownMenuGroup className="flex w-fit right-4">
             <DropdownMenuItem 
               onClick={()=>setOpenModal(true)}
               className="text-center focus:text-red-500 cursor-pointer"

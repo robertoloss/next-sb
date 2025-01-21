@@ -18,5 +18,5 @@ export default async function changeTaskState({ id, newState }: Args) {
     console.error(error)
     return
   }
-  revalidatePath('/protected')
+  revalidatePath('/home')
 }

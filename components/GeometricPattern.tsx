@@ -9,7 +9,7 @@ interface GeometricPatternProps {
 export function GeometricPattern({ className = '' }: GeometricPatternProps) {
   return (
     <>
-    <div className={`absolute inset-0 z-0 overflow-hidden ${className}`}>
+    <div className={`absolute inset-0 -z-20 overflow-hidden ${className}`}>
       <svg
         className="absolute h-full w-full"
         xmlns="http://www.w3.org/2000/svg"

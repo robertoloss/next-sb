@@ -48,6 +48,6 @@ export const createTask = async ({
     console.error("Failed to create task:", error.message);
   } else {
     console.log("Task created successfully!", data );
-    revalidatePath('/protected')
+    revalidatePath('/home')
   }
 };

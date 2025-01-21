@@ -43,5 +43,5 @@ export default async function deleteTask({
 
   await Promise.all(updatePromises)
 
-  revalidatePath("/protected")
+  revalidatePath("/home", "layout")
 }
