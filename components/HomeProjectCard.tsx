@@ -1,11 +1,14 @@
 'use client'
 import { Project } from "@/utils/supabase/types"
 import { useRouter } from "next/navigation"
+import { cn } from "./lib/utils"
 
 type Props = {
 	project: Project
+  numTasks: number
+  numTasksChecked: number
 }
-export default function HomeProjectCard({ project } : Props) {
+export default function HomeProjectCard({ project, numTasks, numTasksChecked } : Props) {
 	const router = useRouter()
 
 	async function navigateToProject() {
@@ -29,8 +32,10 @@ export default function HomeProjectCard({ project } : Props) {
 			<div className="flex flex-col w-fit self-end text-sm font-light">
 				<h1>
 				</h1>
-				<h1>
-					Tasks: 10 
+				<h1 className={cn("text-muted-foreground", {
+          'dark:text-green-400 text-green-500 font-normal dark:font-light': numTasks === numTasksChecked
+        })}>
+					completed: {numTasksChecked}/{numTasks} 
 				</h1>
 			</div>
 		</div>

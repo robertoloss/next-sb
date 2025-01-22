@@ -59,6 +59,19 @@ export default function FormComponent({
     }
   )
 
+  const [ optimisticProject, updateOptimisticProject ] = useOptimistic(
+    project, 
+    (_ , { action, newProject } : {
+      action: 'update',
+      newProject: Project
+    }) => {
+      switch (action) {
+        case 'update':
+          return newProject
+      }
+    }
+  )
+
   return (
       <TaskList 
         deleteProject={deleteProjectAction}
@@ -67,7 +80,8 @@ export default function FormComponent({
         updateTasksOrder={updateTasksOrderAction}
         updateOptimisticTasks={updateOptimisticTasks}
         projectId={projectId}
-        project={project}
+        project={optimisticProject}
+        updateOptimisticProject={updateOptimisticProject}
       />
   )
 }

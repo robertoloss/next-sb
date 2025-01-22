@@ -11,6 +11,7 @@ import { Switch } from "./ui/switch";
 import { ProjectDropDownMenu } from "./ProjectDropDownMenu";
 import { EllipsisVertical } from "lucide-react";
 import { DeleteProjectModal } from "./DeleteProjectModal";
+import ProjectTitle from "./ProjectTitle";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -27,6 +28,10 @@ type Props = {
   optimisticTasks: Task[]
   projectId: string
   project: Project | null
+  updateOptimisticProject: (action: {
+    action: "update";
+    newProject: Project;
+  }) => void
 }
 
 export default function TaskList({
@@ -36,13 +41,15 @@ export default function TaskList({
   createTaskAction,
   updateTasksOrder,
   projectId,
-  project
+  project,
+  updateOptimisticProject
 }
   : Props) 
 {
-  const [_, startTransition ] = useTransition()
   const [ activeTaskId, setActiveTaskId ] = useState<string | null>(null)
   const [ openModal, setOpenModal ] = useState(false)
+
+  const [_, startTransition ] = useTransition()
   const { showSkeletonList, setShowSkeletonList } = useAppStore()
 
   useEffect(()=>{
@@ -86,6 +93,7 @@ export default function TaskList({
     </div>
   ) 
 
+
   return (
     <DndContext
       id={projectId}
@@ -98,12 +106,13 @@ export default function TaskList({
       onDragStart={(event)=>{ setActiveTaskId(event.active.id as string) }}
       onDragEnd={manageEnd}
     >
-      <div className="flex z-10 flex-col gap-y-4 w-full max-w-[640px] h-full pb-[120px]">
+      <div className="flex z-10 flex-col gap-y-4 w-full max-w-[640px] h-full pb-10">
         <div className="flex flex-col w-full px-4 gap-y-4">
           <div className="flex flex-row w-full items-center justify-between">
-            <h1 className="font-light text-xl">
-              {project ? project.name : ''}
-            </h1>
+            <ProjectTitle
+              project={project}
+              updateOptimisticProject={updateOptimisticProject}
+            />
             <DeleteProjectModal 
               openModal={openModal} 
               setOpenModal={setOpenModal}

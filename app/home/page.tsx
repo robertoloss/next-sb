@@ -1,6 +1,7 @@
 import { GeometricPattern } from "@/components/GeometricPattern";
 import HomeProjectCard from "@/components/HomeProjectCard";
 import { createClient } from "@/utils/supabase/server";
+import Loading from "./loading";
 
 
 export default async function Page() {
@@ -19,6 +20,15 @@ export default async function Page() {
 
   if (dataError) return
 
+  const { data: tasks, error: tasksError } = await supabase
+    .from('Task')
+    .select('*')
+    .in('project', projects.map(p => p.id))
+  
+  if (tasksError) return
+
+  
+
 
   return (
     <div className="flex z-10 flex-col w-full h-full">
@@ -29,6 +39,20 @@ export default async function Page() {
           <HomeProjectCard 
             key={project.id}
             project={project}
+            numTasks={
+              tasks.reduce((acc, cur) => {
+                if (cur.project === project.id) {
+                  return acc + 1
+                } else return acc
+              }, 0) || 0
+            }
+            numTasksChecked={
+              tasks.reduce((acc,cur) => {
+                if (cur.project === project.id && cur.checked) {
+                  return acc + 1
+                } else return acc
+              }, 0) || 0
+            }
           />
         ))}
       </div>
