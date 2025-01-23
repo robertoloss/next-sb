@@ -16,7 +16,7 @@ export default async function SideBar({ children }: { children: React.ReactNode}
     .from('Project')
     .select("*")
     .eq('user', user?.id || '')
-    .order('position', { ascending: true })
+    .order('created_at', { ascending: true })
     
 
   return (

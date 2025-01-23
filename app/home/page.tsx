@@ -1,7 +1,6 @@
 import { GeometricPattern } from "@/components/GeometricPattern";
 import HomeProjectCard from "@/components/HomeProjectCard";
 import { createClient } from "@/utils/supabase/server";
-import Loading from "./loading";
 
 
 export default async function Page() {
@@ -17,6 +16,7 @@ export default async function Page() {
     .from('Project')
     .select('*')
     .eq('user', user.id)
+    .order('created_at', { ascending: true })
 
   if (dataError) return
 
@@ -34,7 +34,6 @@ export default async function Page() {
     <div className="flex z-10 flex-col w-full h-full">
       <div className="flex flex-row p-5 flex-wrap w-full h-fit gap-4 sm:gap-6 overflow-auto tasklist">
         {projects
-          .sort((a,b) => a.position! - b.position!)
           .map(project => (
           <HomeProjectCard 
             key={project.id}

@@ -64,7 +64,7 @@ export function AppSidebar({  projects, createProjectAction }: ComponentProps<ty
             <SidebarMenu>
               <div className="flex flex-col p-4 gap-y-4 w-full">
                 {optimisticProjects
-                  .sort((a,b)=>a.position! - b.position!)
+                  .sort((a,b)=> new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
                   .map(project => (
                     <ProjectCard project={project} key={project.id} />
                   ))
