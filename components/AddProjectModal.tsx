@@ -67,10 +67,11 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
       <DialogTrigger asChild>
         { children }
       </DialogTrigger>
-      <DialogContent className="bg-sidebar-background min-h-60 sm:max-w-[425px]">
+      <DialogContent className="flex flex-col w-full bg-sidebar-background h-full max-h-60 sm:max-w-[425px]">
         <form
           onSubmit={()=>setEventValue('')}
           action={addProject}
+          className="flex flex-col h-full justify-between"
         >
           <DialogHeader>
             <DialogTitle>Create a new project</DialogTitle>
@@ -78,18 +79,13 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
               Enter the name of your new project
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input 
-                name="project-name" 
-                onChange={(e)=>(setEventValue(e.target.value))}
-                value={eventValue}
-                className="col-span-3" 
-              />
-            </div>
+          <div className="flex gap-4 w-full py-4">
+            <Input 
+              name="project-name" 
+              onChange={(e)=>(setEventValue(e.target.value))}
+              value={eventValue}
+              className="col-span-3" 
+            />
           </div>
           <DialogFooter>
             <Button 
