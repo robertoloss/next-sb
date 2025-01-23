@@ -1,15 +1,17 @@
 "use server";
-
+import { v4 as uuid } from "uuid"; 
 import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import createProject from "./actions/createProject";
+import { createTask } from "./actions/createTask";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const supabase = await createClient();
-  const origin = (await headers()).get("origin");
+  //const origin = (await headers()).get("origin");
 
   if (!email || !password) {
     return encodedRedirect(
@@ -18,24 +20,39 @@ export const signUpAction = async (formData: FormData) => {
       "Email and password are required",
     );
   }
-
-  const { error } = await supabase.auth.signUp({
+  const { data: { user }, error } = await supabase.auth.signUp({
     email,
     password,
-    options: {
-      emailRedirectTo: `${origin}/auth/callback`,
-    },
   });
 
-  if (error) {
-    console.error(error.code + " " + error.message);
-    return encodedRedirect("error", "/sign-up", error.message);
+  if (error || !user) {
+    console.error(error?.code + " " + error?.message || 'no user');
+    return encodedRedirect("error", "/sign-up", error?.message || 'no user');
   } else {
-    return encodedRedirect(
-      "success",
-      "/sign-up",
-      "Thanks for signing up! Please check your email for a verification link.",
-    );
+
+    const numOfExampleProjects = 3
+
+    for (let i=0; i < numOfExampleProjects; i++) {
+      const projectId = uuid()
+      await createProject({
+        name: `Example Project ${i+1}`,
+        id: projectId
+      })
+      for (let j=0; j<3; j++) {
+        const taskId = uuid()
+        await createTask({
+          id: taskId,
+          label: `Example Task ${i+1}`,
+          projectId
+        })
+      }
+    }
+    redirect('/home')
+    //return encodedRedirect(
+    //  "success",
+    //  "/sign-up",
+    //  "Thanks for signing up! Please check your email for a verification link.",
+    //);
   }
 };
 
