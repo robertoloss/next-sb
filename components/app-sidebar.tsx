@@ -11,11 +11,12 @@ import {
 } from "@/components/ui/sidebar"
 import ProjectCard from "./ProjectCard"
 import { Project } from "@/utils/supabase/types"
-import { ComponentProps, useOptimistic } from "react"
+import { ComponentProps, useEffect, useOptimistic } from "react"
 import { AddProjectModal } from "./AddProjectModal"
 import { Button } from "./ui/button"
 import Link from "next/link"
 import { Home } from "lucide-react"
+import { useAppStore } from "@/utils/zustand/store"
 
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
   createProjectAction: ({ name, id }: { name: string; id: string }) => Promise<void>
 }
 export function AppSidebar({  projects, createProjectAction }: ComponentProps<typeof Sidebar> & Props) {
+  const { setUpdateProjects } = useAppStore()
   const [ optimisticProjects, updateOptimisticProjects ] = useOptimistic(
     projects,
     (state, { action, project }: {
@@ -33,11 +35,18 @@ export function AppSidebar({  projects, createProjectAction }: ComponentProps<ty
       switch (action) {
         case 'create':
           return project ? [ ...state, project ] : state
+        case 'update':
+          return project ? [
+            ...state.filter(p => p.id !== project.id), project
+          ] : state
         default:
          return []
       }
     }
   )
+  useEffect(()=>{
+    setUpdateProjects(updateOptimisticProjects)
+  },[updateOptimisticProjects])
 
   return (
     <Sidebar>

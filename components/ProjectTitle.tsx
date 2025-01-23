@@ -1,8 +1,8 @@
+import updateProjectTitle from "@/app/actions/updateProjectTitle"
 import { Project } from "@/utils/supabase/types"
+import { useAppStore } from "@/utils/zustand/store"
 import { Check, Pencil, X } from "lucide-react"
-import { KeyboardEventHandler, useEffect, useRef, useState } from "react"
-
-
+import { useEffect, useRef, useState, useTransition } from "react"
 
 type Props = {
   project: Project | null,
@@ -12,9 +12,11 @@ type Props = {
   }) => void
 }
 export default function ProjectTitle({ project, updateOptimisticProject }: Props) {
+  const { updateProjects } = useAppStore()
   const [ showTitleInput, setShowTitleInput ] = useState(false) 
   const initialInputValue = project ? project.name! : ''
   const [ inputValue, setInputValue ] = useState(initialInputValue)
+  const [ _, startTransition ] = useTransition()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -29,14 +31,25 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
     }
   }, [showTitleInput]);
 
-  function updateTitle(data: FormData) {
+  async function updateTitle(data: FormData) {
+    console.log("updating")
     const newName = data.get('newName') as string
     const newProject = { ...project!, name: newName }
-    updateOptimisticProject({ 
+    if (updateProjects) updateProjects({
+      action: 'update',
+      project: newProject
+    })
+    startTransition(()=> updateOptimisticProject({ 
       action: 'update',
       newProject
+    }))
+    const { res, error } = await updateProjectTitle({
+      id: project?.id || '',
+      title: newName,
     })
+    console.log("data, error: ", res, error)
   }
+
   function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     switch (e.key) {
       case "Enter":
@@ -52,11 +65,12 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
 
   return (
     <div 
-      className="flex flex-row w-full max-w-[75%] gap-x-4 group cursor-pointer"
+      className="flex flex-row w-full mr-1 gap-x-4 group cursor-pointer"
       onClick={handleTitleClicked}
     >
       {showTitleInput &&
         <form 
+          onSubmit={()=>setShowTitleInput(false)}
           action={updateTitle}
           className="flex flex-row items-center gap-x-4 h-[28px] w-full"
         >
@@ -70,7 +84,9 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
             className="flex w-full bg-transparent flex-row border-none focus:outline-none text-xl font-light text-muted-foreground"
           />
           <div className="flex flex-row gap-x-1">
-            <button>
+            <button
+              type="submit"
+            >
               <Check/>
             </button>
             <button 

@@ -9,7 +9,6 @@ import { GripVertical, Trash2Icon } from "lucide-react"
 import { Checkbox } from "./ui/checkbox"
 import { Task } from "@/utils/supabase/types"
 
-
 type Props = {
   task?: Task
   updateOptimisticTasks: (action: {
@@ -60,15 +59,14 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id, pro
     <Card
       style={style}
       { ...attributes }
-      className={cn(`w-full min-h-[60px] flex items-center cursor-default flex-row gap-x-4 justify-between rounded-lg 
-        bg-sidebar-background border-foreground`, {
+      className={cn(`w-full min-h-[60px] flex items-center cursor-default flex-row gap-x-4 justify-between rounded-lg bg-sidebar-background border-foreground group scale-100 transition-all`, {
         'bg-opacity-100 shadow-none border-primary/0': task?.checked,
         'z-50 h-fit': isDragging,
-        'invisible': isDragging && !overlay
+        'invisible': isDragging && !overlay,
       })}
       ref={setNodeRef}
     >
-      <div className={cn(`flex flex-row items-center cursor-default gap-x-4 justify-between
+      <div className={cn(`flex flex-row items-center cursor-default gap-x-4 justify-between transition-all
         p-4 rounded-lg bg-primary/5 w-full`, {
           'bg-primary/0 border border-primary/10': task?.checked
       })}>
@@ -93,8 +91,9 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id, pro
         })}
       />
       <div 
-        className={cn("flex flex-row justify-start w-full font-light", {
-          'line-through text-primary/50': task?.checked
+        className={cn("flex flex-row justify-start w-full font-light ", {
+          'line-through text-primary/50': task?.checked,
+          'group-hover:': !task?.checked
         })}
       >
         {task?.label}
