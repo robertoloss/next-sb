@@ -12,7 +12,7 @@ type Props = {
   projectId: string
   project: Project | null
 }
-export default function FormComponent({ 
+export default function TaskListWrapper({ 
   projectId, 
   createTaskAction, 
   tasks, 

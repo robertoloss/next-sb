@@ -1,7 +1,7 @@
 import { createTask } from "@/app/actions/createTask"
 import deleteProject from "@/app/actions/deleteProject";
 import updateTasksOrder from "@/app/actions/updateTasksOrder"
-import FormComponent from "@/components/FormComponent"
+import TaskListWrapper from "@/components/TaskListWrapper";
 import { GeometricPattern } from "@/components/GeometricPattern";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -39,7 +39,7 @@ export default async function Main({ params } : Props) {
   return (      
     <div className="flex flex-row h-full justify-center w-full pt-10">
       <GeometricPattern className="z-0" />
-      <FormComponent
+      <TaskListWrapper
         deleteProjectAction={deleteProject}
         updateTasksOrderAction={updateTasksOrder}
         createTaskAction={createTask}

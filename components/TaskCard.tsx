@@ -8,6 +8,7 @@ import { Card } from "./ui/card"
 import { GripVertical, Trash2Icon } from "lucide-react"
 import { Checkbox } from "./ui/checkbox"
 import { Task } from "@/utils/supabase/types"
+import TaskTitle from "./TaskTitle"
 
 type Props = {
   task?: Task
@@ -16,11 +17,24 @@ type Props = {
     id?: string;
     amount?: number;
   }) => void
+  updateOptimisticTask: (action: {
+    action: "update";
+    newTask: Task;
+  }) => void
   id: string
   overlay: boolean
   projectId: string
 }
-export default function TaskCard({ task, overlay, updateOptimisticTasks, id, projectId }: Props) {
+export default function TaskCard({ 
+  task, 
+  overlay, 
+  updateOptimisticTasks, 
+  updateOptimisticTask, 
+  id, 
+  projectId 
+}
+  : Props
+) {
   const [ _, startTransition ] = useTransition()
   const { setNodeRef, listeners, attributes, isDragging, transform, transition } = useSortable({
     id,
@@ -90,14 +104,10 @@ export default function TaskCard({ task, overlay, updateOptimisticTasks, id, pro
         className={cn("w-5 h-5", {
         })}
       />
-      <div 
-        className={cn("flex flex-row justify-start w-full font-light ", {
-          'line-through text-primary/50': task?.checked,
-          'group-hover:': !task?.checked
-        })}
-      >
-        {task?.label}
-      </div>
+      <TaskTitle
+        task={task!}
+        updateOptimisticTask={updateOptimisticTask}
+      />
       <button
         type="button"
         className={cn("text-foreground hover:text-destructive transition-all", {

@@ -1,20 +1,19 @@
-import updateProjectTitle from "@/app/actions/updateProjectTitle"
-import { Project } from "@/utils/supabase/types"
-import { useAppStore } from "@/utils/zustand/store"
+import updateTaskTitle from "@/app/actions/updateTaskTitle"
+import { Task } from "@/utils/supabase/types"
 import { Check, Pencil, X } from "lucide-react"
 import { useEffect, useRef, useState, useTransition } from "react"
+import { cn } from "./lib/utils"
 
 type Props = {
-  project: Project | null,
-  updateOptimisticProject: (action: {
+  task: Task,
+  updateOptimisticTask: (action: {
     action: "update";
-    newProject: Project;
+    newTask: Task;
   }) => void
 }
-export default function ProjectTitle({ project, updateOptimisticProject }: Props) {
-  const { updateProjects } = useAppStore()
+export default function TaskTitle({ task, updateOptimisticTask  }: Props) {
   const [ showTitleInput, setShowTitleInput ] = useState(false) 
-  const initialInputValue = project ? project.name! : ''
+  const initialInputValue = task.label!
   const [ inputValue, setInputValue ] = useState(initialInputValue)
   const [ _, startTransition ] = useTransition()
 
@@ -32,22 +31,17 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
   }, [showTitleInput]);
 
   async function updateTitle(data: FormData) {
-    console.log("updating")
     const newName = data.get('newName') as string
-    const newProject = { ...project!, name: newName }
-    if (updateProjects) updateProjects({
+    const newTask = { ...task, label: newName }
+    startTransition(()=> updateOptimisticTask({ 
       action: 'update',
-      project: newProject
-    })
-    startTransition(()=> updateOptimisticProject({ 
-      action: 'update',
-      newProject
+      newTask
     }))
-    const { res, error } = await updateProjectTitle({
-      id: project?.id || '',
-      title: newName,
+    const { res, error } = await updateTaskTitle({
+      id: task?.id || '',
+      newLabel: newName,
     })
-    console.log("data, error: ", res, error)
+    console.log({ res, error })
   }
 
   function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -66,7 +60,6 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
   return (
     <div 
       className="flex flex-row w-full mr-1 gap-x-4 group cursor-pointer"
-      onClick={handleTitleClicked}
     >
       {showTitleInput &&
         <form 
@@ -83,7 +76,7 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
             onBlur={handleCancel}
             onKeyDown={handleInputKeyDown}
             type='text'
-            className="flex w-full bg-transparent flex-row border-none focus:outline-none text-xl font-light text-muted-foreground"
+            className="flex w-full bg-transparent flex-row border-none focus:outline-none text-md font-light text-muted-foreground"
           />
           <div className="flex flex-row gap-x-1">
             <button
@@ -101,14 +94,22 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
         </form>
       }
       {!showTitleInput && 
-        <div className="flex flex-row items-center gap-2">
-          <h1 className="font-light text-xl  transition-all">
-            {project ? project.name : ''}
+        <div 
+          className="flex flex-row items-center gap-2 group/label"
+          onClick={handleTitleClicked}
+        >
+          <h1 
+            className={cn("flex flex-row justify-start w-fit font-light ", {
+              'line-through text-primary/50': task?.checked,
+              'group-hover:': !task?.checked
+            })}
+          >
+            {task.label}
           </h1>
           <Pencil 
-            width={16} 
+            width={14} 
             className="
-              text-transparent group-hover:text-muted-foreground 
+              text-transparent group-hover/label:text-muted-foreground 
               cursor-pointer transition-all"
           />
         </div>

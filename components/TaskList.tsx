@@ -12,6 +12,7 @@ import { ProjectDropDownMenu } from "./ProjectDropDownMenu";
 import { EllipsisVertical } from "lucide-react";
 import { DeleteProjectModal } from "./DeleteProjectModal";
 import ProjectTitle from "./ProjectTitle";
+import TaskCardWrapper from "./TaskCardWrapper";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -23,8 +24,8 @@ export type UpdateOptimisitTasks = (action: {
 type Props = {
   deleteProject: ({ id }: { id: string }) => Promise<void>
   updateTasksOrder: ({ newList }: { newList: any[] }) => Promise<void>
-  createTaskAction: ({ id, label, projectId }: { id: string; label: string, projectId: string }) => Promise<void>,
-  updateOptimisticTasks: UpdateOptimisitTasks,
+  createTaskAction: ({ id, label, projectId }: { id: string; label: string, projectId: string }) => Promise<void>
+  updateOptimisticTasks: UpdateOptimisitTasks
   optimisticTasks: Task[]
   projectId: string
   project: Project | null
@@ -140,7 +141,7 @@ export default function TaskList({
           >
           {
             optimisticTasks.map(task => (
-              <TaskCard 
+              <TaskCardWrapper 
                 projectId={projectId}
                 overlay={false}
                 updateOptimisticTasks={updateOptimisticTasks}
@@ -155,7 +156,7 @@ export default function TaskList({
       </div>
       {activeTaskId &&
         <DragOverlay>
-          <TaskCard 
+          <TaskCardWrapper
             projectId={projectId}
             overlay={true}
             updateOptimisticTasks={updateOptimisticTasks}
