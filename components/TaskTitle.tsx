@@ -65,7 +65,9 @@ export default function TaskTitle({ task, updateOptimisticTask  }: Props) {
         <form 
           onSubmit={()=>setShowTitleInput(false)}
           action={updateTitle}
-          className="flex flex-row items-center gap-x-4 h-[28px] w-full"
+          className={cn("flex flex-row items-center gap-x-4 h-[26px] w-full", {
+            'h-[24px]': task.checked
+          })}
         >
           <input 
             name="newName" 
