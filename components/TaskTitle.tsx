@@ -43,6 +43,19 @@ export default function TaskTitle({ task, updateOptimisticTask  }: Props) {
     })
     console.log({ res, error })
   }
+  async function blurHandler(e: React.FocusEvent<HTMLInputElement, Element>) {
+    const newName = e.target.value
+    const newTask = { ...task, label: newName }
+    startTransition(()=> updateOptimisticTask({ 
+      action: 'update',
+      newTask
+    }))
+    const { res, error } = await updateTaskTitle({
+      id: task?.id || '',
+      newLabel: newName,
+    })
+    console.log({ res, error })
+  }
 
   function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     switch (e.key) {
@@ -75,7 +88,10 @@ export default function TaskTitle({ task, updateOptimisticTask  }: Props) {
             value={inputValue}
             maxLength={60}
             onChange={(e)=>setInputValue(e.target.value)}
-            onBlur={handleCancel}
+            onBlur={(e)=>{
+              setShowTitleInput(false)
+              blurHandler(e)
+            }}
             onKeyDown={handleInputKeyDown}
             type='text'
             className="flex w-full bg-transparent flex-row border-none focus:outline-none text-md font-light text-muted-foreground"

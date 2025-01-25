@@ -31,9 +31,27 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
     }
   }, [showTitleInput]);
 
-  async function updateTitle(data: FormData) {
-    console.log("updating")
+  async function blurHandler(e: React.FocusEvent<HTMLInputElement, Element>) {
+    const newName = e.target.value
+    const newProject = { ...project!, name: newName }
+    if (updateProjects) updateProjects({
+      action: 'update',
+      project: newProject
+    })
+    updateOptimisticProject({ 
+      action: 'update',
+      newProject
+    })
+    const { res, error } = await updateProjectTitle({
+      id: project?.id || '',
+      title: newName,
+    })
+    console.log("data, error: ", res, error)
+  }
+
+  async function submitHandler(data: FormData) {
     const newName = data.get('newName') as string
+    console.log("updating")
     const newProject = { ...project!, name: newName }
     if (updateProjects) updateProjects({
       action: 'update',
@@ -71,7 +89,7 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
       {showTitleInput &&
         <form 
           onSubmit={()=>setShowTitleInput(false)}
-          action={updateTitle}
+          action={submitHandler}
           className="flex flex-row items-center gap-x-4 h-[28px] w-full"
         >
           <input 
@@ -80,7 +98,10 @@ export default function ProjectTitle({ project, updateOptimisticProject }: Props
             value={inputValue}
             maxLength={60}
             onChange={(e)=>setInputValue(e.target.value)}
-            onBlur={handleCancel}
+            onBlur={(e) => {
+              setShowTitleInput(false)
+              startTransition(()=>blurHandler(e))
+            }}
             onKeyDown={handleInputKeyDown}
             type='text'
             className="flex w-full bg-transparent flex-row border-none focus:outline-none text-xl font-light text-muted-foreground"
