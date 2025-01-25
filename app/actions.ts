@@ -42,7 +42,7 @@ export const signUpAction = async (formData: FormData) => {
         const taskId = uuid()
         await createTask({
           id: taskId,
-          label: `Example Task ${i+1}`,
+          label: `Example Task ${j+1}`,
           projectId
         })
       }
