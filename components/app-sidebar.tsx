@@ -8,6 +8,7 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import ProjectCard from "./ProjectCard"
 import { Project } from "@/utils/supabase/types"
@@ -25,6 +26,7 @@ type Props = {
 }
 export function AppSidebar({  projects, createProjectAction }: ComponentProps<typeof Sidebar> & Props) {
   const { setUpdateProjects } = useAppStore()
+  const { setOpenMobile} = useSidebar()
   const [ optimisticProjects, updateOptimisticProjects ] = useOptimistic(
     projects,
     (state, { action, project }: {
@@ -54,6 +56,7 @@ export function AppSidebar({  projects, createProjectAction }: ComponentProps<ty
         <Link 
           href={'/home'}
           className="flex flex-row justify-center hover:text-muted-foreground transition-all"
+          onClick={()=>setOpenMobile(false)}
         >
           <Home/>
         </Link>

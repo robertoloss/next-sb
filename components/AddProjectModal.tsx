@@ -16,6 +16,7 @@ import { useState, useTransition } from "react"
 import { Project } from "@/utils/supabase/types"
 import { useRouter } from "next/navigation"
 import { useAppStore } from "@/utils/zustand/store"
+import { useSidebar } from "./ui/sidebar"
 
 type Args = {
   name: string
@@ -33,6 +34,7 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
   const [ _, startTransition ] = useTransition()
   const router = useRouter()
   const { setShowSkeletonList } = useAppStore()
+  const { setOpenMobile} = useSidebar()
 
   function addProject(data: FormData) {
     const projectId = uuid()
@@ -55,6 +57,7 @@ export function AddProjectModal({ createProject, updateOptimisticProjects, child
       id: projectId
     })
     router.push(`/home/${projectId}`)
+    setOpenMobile(false)
   }
 
   function manageButtonClick() {

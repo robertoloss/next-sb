@@ -43,7 +43,7 @@ export default function AddTask({ createTaskAction, updateOptimisticTasks, proje
     >
       <input 
         type="text" 
-        maxLength={60}
+        maxLength={40}
         name="label"
         onFocus={()=>setError(false)}
         onChange={(e)=>(setEventValue(e.target.value))}

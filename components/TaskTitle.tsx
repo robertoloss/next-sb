@@ -117,7 +117,7 @@ export default function TaskTitle({ task, updateOptimisticTask  }: Props) {
           onClick={handleTitleClicked}
         >
           <h1 
-            className={cn("flex flex-row justify-start w-fit font-light ", {
+            className={cn("flex flex-row text-wrap break-words justify-start w-full break-all font-light ", {
               'line-through text-primary/50': task?.checked,
               'group-hover:': !task?.checked
             })}
