@@ -1,11 +1,11 @@
 import { GeometricPattern } from "@/components/GeometricPattern";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Loading() {
+export default function Loading({ noPattern }: { noPattern?: boolean}) {
   return (
     <div className="flex z-10 flex-col justify-center items-center w-full h-full">
       <div className=" flex flex-col h-full overflow-hidden px-4 pt-10 w-full items-center">
-        <GeometricPattern className="-z-20"/>
+        {!noPattern && <GeometricPattern className="-z-20"/>}
         <div className="flex flex-col justify-end h-fit w-full max-w-[606px]">
           <Skeleton className="w-[128px] h-[28px]"/>
           <div className="h-4"/>

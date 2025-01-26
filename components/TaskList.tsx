@@ -13,6 +13,7 @@ import { EllipsisVertical } from "lucide-react";
 import { DeleteProjectModal } from "./DeleteProjectModal";
 import ProjectTitle from "./ProjectTitle";
 import TaskCardWrapper from "./TaskCardWrapper";
+import Loading from "@/app/home/loading";
 
 export type UpdateOptimisitTasks = (action: {
   action: "create" | "delete" | "updatePositions" | "changeState";
@@ -82,18 +83,10 @@ export default function TaskList({
   );
 
   if (showSkeletonList) return (
-    <div className="flex flex-col w-full h-full items-center">
-      <div className="flex flex-col w-full max-w-[640px]  gap-y-4">
-        {[...Array(8).keys()].map((item) => (
-          <Skeleton 
-            key={item}
-            className="w-full h-10 rounded-md min-h-[60px]"
-          />
-        ))}
-      </div>
+      <div className=" flex flex-col h-full overflow-hidden px-2 -mt-10 w-full items-center">
+      <Loading noPattern={true} />
     </div>
   ) 
-
 
   return (
     <DndContext
