@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import createProject from "./actions/createProject";
 import { createTask } from "./actions/createTask";
+import sendEmail from "./actions/sendEmail";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -29,6 +30,7 @@ export const signUpAction = async (formData: FormData) => {
     console.error(error?.code + " " + error?.message || 'no user');
     return encodedRedirect("error", "/sign-up", error?.message || 'no user');
   } else {
+    sendEmail()
 
     const numOfExampleProjects = 3
 
@@ -48,11 +50,6 @@ export const signUpAction = async (formData: FormData) => {
       }
     }
     redirect('/home')
-    //return encodedRedirect(
-    //  "success",
-    //  "/sign-up",
-    //  "Thanks for signing up! Please check your email for a verification link.",
-    //);
   }
 };
 

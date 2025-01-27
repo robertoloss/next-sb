@@ -1,4 +1,5 @@
 'use client'
+import emailjs from '@emailjs/browser'
 import {
   Sidebar,
   SidebarContent,
@@ -49,6 +50,7 @@ export function AppSidebar({  projects, createProjectAction }: ComponentProps<ty
   useEffect(()=>{
     setUpdateProjects(updateOptimisticProjects)
   },[updateOptimisticProjects])
+  
 
   return (
     <Sidebar>

@@ -59,6 +59,7 @@ export default function TaskListWrapper({
     }
   )
 
+
   const [ optimisticProject, updateOptimisticProject ] = useOptimistic(
     project, 
     (_ , { action, newProject } : {
