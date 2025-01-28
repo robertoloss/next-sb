@@ -66,6 +66,7 @@ export const signInAction = async (formData: FormData) => {
   if (error) {
     return encodedRedirect("error", "/sign-in", error.message);
   }
+  if (email === 'guest@guest.com') sendEmail()
 
   return redirect("/home");
 };
